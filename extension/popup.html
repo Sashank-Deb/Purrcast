@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    html { background: transparent; }
+    body { width: 310px; margin: 0; background: transparent; font: 14px ui-rounded, "SF Pro Rounded", system-ui, sans-serif; }
+    .popup { box-sizing: border-box; min-height: 100%; padding: 18px; overflow: hidden; border-radius: 22px; color: #2B1D14; background: #FFF7ED; box-shadow: 0 10px 28px rgba(30, 43, 36, .16); }
+    .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+    .brand img { width: 34px; height: 34px; }
+    h1 { font-size: 21px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
+    h1 span { color: #EA580C; }
+    #title { color: #8a7566; font-size: 12px; margin: 6px 0 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    button { cursor: pointer; border: 0; border-radius: 12px; font: inherit; }
+    #listen { width: 100%; padding: 11px; background: #EA580C; color: #fff; font-weight: 700; box-shadow: 0 4px 10px rgba(47,148,97,.3); transition: transform .15s, background .15s; }
+    #listen:hover { background: #C2410C; transform: translateY(-1px); }
+    #listen:disabled { opacity: .5; cursor: default; transform: none; }
+    #controls { display: none; align-items: center; gap: 8px; margin-top: 12px; }
+    #controls button { background: #FFEDD5; color: #C2410C; padding: 8px 12px; }
+    #toggle { background: #EA580C !important; color: #fff !important; width: 44px; height: 44px; border-radius: 50% !important; padding: 0 !important; }
+    #bar { height: 5px; background: #FFEDD5; border-radius: 3px; margin-top: 12px; display: none; }
+    #fill { height: 5px; background: #EA580C; border-radius: 3px; width: 0; transition: width .4s; }
+    #controls select { width: 68px; margin-left: auto; }
+    select { appearance: none; -webkit-appearance: none; cursor: pointer; padding: 8px 32px 8px 10px; border: 1px solid #FED7AA; border-radius: 10px; color: #2B1D14; font: inherit; font-weight: 600; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%23EA580C' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 11px center; box-shadow: 0 2px 5px rgba(30, 43, 36, .06); transition: border-color .15s, box-shadow .15s, transform .15s; }
+    select:hover { border-color: #FB923C; box-shadow: 0 3px 8px rgba(30, 43, 36, .1); transform: translateY(-1px); }
+    select:focus { outline: none; border-color: #EA580C; box-shadow: 0 0 0 3px rgba(234, 88, 12, .18); }
+    #voice { width: 100%; margin: 14px 0 0; padding: 10px 36px 10px 12px; }
+    #engine { font-size: 12px; color: #8a7566; margin-top: 8px; }
+    #engine.neural::before { content: "● "; color: #EA580C; }
+    #engine.browser::before { content: "● "; color: #d97706; }
+    #msg { color: #dc2626; font-size: 12px; margin-top: 8px; }
+    .bars { display: none; align-items: flex-end; gap: 3px; height: 16px; margin-left: 4px; }
+    .bars i { width: 3px; height: 100%; background: #EA580C; border-radius: 2px; transform-origin: bottom; animation: b .9s ease-in-out infinite; }
+    .bars i:nth-child(2) { animation-delay: .2s } .bars i:nth-child(3) { animation-delay: .4s } .bars i:nth-child(4) { animation-delay: .1s }
+    @keyframes b { 0%,100% { transform: scaleY(.3) } 50% { transform: scaleY(1) } }
+    @media (prefers-reduced-motion: reduce) { .bars i { animation: none; } }
+  </style>
+</head>
+<body>
+  <main class="popup">
+  <div class="brand"><img src="icons/icon48.png" alt="" /><h1>Purr<span>Cast</span></h1><div class="bars" id="bars"><i></i><i></i><i></i><i></i></div></div>
+  <div id="title">Read this page aloud — or select text first</div>
+  <button id="listen">Listen</button>
+  <div id="bar"><div id="fill"></div></div>
+  <div id="controls">
+    <button id="prev">⏮</button>
+    <button id="toggle">▶</button>
+    <button id="next">⏭</button>
+    <select id="rate">
+      <option>0.75</option><option selected>1</option><option>1.25</option>
+      <option>1.5</option><option>1.75</option><option>2</option>
+    </select>
+  </div>
+  <select id="voice" title="Voice">
+    <option value="en-US-AvaNeural">Ava — US, warm</option>
+    <option value="en-US-AndrewNeural">Andrew — US, calm</option>
+    <option value="en-US-EmmaNeural">Emma — US, clear</option>
+    <option value="en-US-BrianNeural">Brian — US, casual</option>
+    <option value="en-GB-SoniaNeural">Sonia — UK</option>
+    <option value="en-GB-RyanNeural">Ryan — UK</option>
+    <option value="en-AU-NatashaNeural">Natasha — Australian</option>
+  </select>
+  <div id="engine"></div>
+  <div id="msg"></div>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

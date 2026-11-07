@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "PurrCast — read articles aloud",
+  "version": "0.3.0",
+  "description": "PurrCast reads the current page (or your selection) aloud with natural neural voices. Settle in. We'll read to you.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["http://localhost/*", "http://127.0.0.1/*"],
+  "icons": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" },
+  "background": { "service_worker": "background.js" },
+  "action": { "default_popup": "popup.html", "default_title": "PurrCast", "default_icon": { "16": "icons/icon16.png", "32": "icons/icon32.png" } },
+  "content_scripts": [{ "matches": ["http://*/*", "https://*/*"], "js": ["content.js"] }]
+}
