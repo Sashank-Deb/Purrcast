@@ -36,7 +36,19 @@ export default function Reader({ children }: { children?: React.ReactNode }) {
 
   async function fromFile(f: File) {
     setError("");
-    if (!/\.(txt|md|markdown|html?)$/i.test(f.name)) return setError("Supported files: .txt, .md, .html");
+    if (/\.pdf$/i.test(f.name) || f.type === "application/pdf") {
+      setLoading(true);
+      try {
+        const fd = new FormData(); fd.append("file", f);
+        const r = await fetch("/api/extract-pdf", { method: "POST", body: fd });
+        const j = await r.json();
+        if (!r.ok) throw new Error(j.error);
+        setDoc({ title: j.title, text: j.text, source: f.name });
+      } catch (err) { setError((err as Error).message); }
+      setLoading(false);
+      return;
+    }
+    if (!/\.(txt|md|markdown|html?)$/i.test(f.name)) return setError("Supported files: .pdf, .txt, .md, .html");
     let text = await f.text();
     if (/\.html?$/i.test(f.name)) text = new DOMParser().parseFromString(text, "text/html").body.innerText;
     setDoc({ title: f.name.replace(/\.[^.]+$/, ""), text: text.replace(/[#*_`>]/g, ""), source: f.name });
@@ -103,8 +115,8 @@ export default function Reader({ children }: { children?: React.ReactNode }) {
                   onDrop={(e) => { e.preventDefault(); setDrag(false); e.dataTransfer.files[0] && fromFile(e.dataTransfer.files[0]); }}
                   className={`grid h-40 cursor-pointer place-items-center rounded-2xl border-2 border-dashed text-center transition ${drag ? "border-brand bg-peach-50" : "border-peach-200 hover:border-brand hover:bg-peach-50/50"}`}
                 >
-                  <div><Paw size={28} className="mx-auto mb-2 text-brand-light" /><p className="font-semibold">Drop a file or click to browse</p><p className="mt-1 text-sm text-stone-400">.txt · .md · .html</p></div>
-                  <input ref={fileInput} type="file" accept=".txt,.md,.markdown,.html,.htm" className="hidden" onChange={(e) => e.target.files?.[0] && fromFile(e.target.files[0])} />
+                  <div><Paw size={28} className="mx-auto mb-2 text-brand-light" /><p className="font-semibold">Drop a file or click to browse</p><p className="mt-1 text-sm text-stone-400">.pdf · .txt · .md · .html</p></div>
+                  <input ref={fileInput} type="file" accept=".pdf,application/pdf,.txt,.md,.markdown,.html,.htm" className="hidden" onChange={(e) => e.target.files?.[0] && fromFile(e.target.files[0])} />
                 </div>
               )}
               {tab === "paste" && (
